@@ -1,6 +1,6 @@
-# web3.js_vue
+# web3.js bet-game
 
-> A Bet Game
+> A Bet game with web3.js and eth
 
 ## Build Setup
 
