@@ -1,0 +1,135 @@
+body{
+    background: rgb(69, 161, 189);
+    font-family: 'Ruda', sans-serif;
+}
+.bet-choose-item button {
+    outline: none!important;
+}
+a,a:hover,a:link,a:active{
+    text-decoration: none;
+}
+.bet-hearder {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.bet-hearder .fa-bitcoin{
+    font-size: 35px;
+    color: #ffffff;
+    margin-right: 10px;
+    line-height: 50px!;
+}
+.bet-hearder .fa-telegram{
+    font-size: 30px;
+    color: #dfdfdf;
+    margin-right: 10px;
+    line-height: 50px!;
+    margin-top: 10px;
+}
+.bet-hearder .fa-telegram:hover{
+    color:#fff;
+}
+.bet-hearder .title {
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 25px;
+    line-height: 50px!;
+}
+.bet-hearder .link {
+    line-height: 50px;
+    display: block;
+    text-align: right;
+}
+.bet-round {
+    color: #dfdfdf;
+    text-align: center;
+    font-size: 14px;
+
+}
+.bet-round-item {
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #dfdfdf;
+    margin: 0 auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.bet-round-clock {
+    font-size: 30px;
+    color: #fff;
+    line-height: 40px;
+}
+.bet-round-color-1 {
+    border-color: #6BB9D1;
+    background-color: #6BB9D1;
+    color: #fff;
+    border: none;
+}
+.bet-round-color-2 {
+    border-color: #dfdfdf;
+    color: #6cd5bc;
+    background: #dfdfdf;
+    font-size: 16px;
+    font-weight: 600;
+}
+.bet-round-size-12 {
+    font-size: 12px;
+}
+.bet-rank-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 40px;
+}
+.bet-round-bg-1 {
+    background: #6cd5bc;
+}
+.btn-circle {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 14px;
+    line-height: 1.428571429;
+    border-radius: 25px;
+    font-weight: 600;
+}
+.bet-pannel {
+    margin-top: 10px;
+}
+.bet-choose-item {
+    margin:10px 0;
+}
+.bet-center {
+    text-align: center;
+}
+.bet-rank {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    border-radius: 5px;
+}
+.bet-full {
+    width: 80%;
+    margin: 10px 10% 5px 10% ;
+}
+.bet-badge {
+    margin-left: 10px;
+}
+.bet-well {
+    line-height:35px;
+    text-align:center
+}
+.bet-rank .control-label {
+    color: #fff;
+    text-align:left;
+    word-break:break-all;
+}
+.bet-ticket {
+    display:inline-block; 
+    margin-right:5px;
+    margin-bottom:5px;
+    background:#e00;
+    border-radius:5px;
+    color:#fff;
+    padding:2px 5px;
+}
