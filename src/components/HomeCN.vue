@@ -89,7 +89,7 @@
                   <tbody>
                     <tr v-for="item in awardRecordList" :key="item.rid">
                         <td>{{item.rid}}</td>
-                        <td><div class="bet-ticket" style="background:#888">{{renderTicket(item.ticket)}}</div></td>
+                        <td><div class="bet-ticket" style="background:#888">{{renderTicket(item.first)}}</div></td>
                         <td><button type="button" class="btn btn-success" @click="showHisWinDialog(item.rid, 2)">查看</button></td>
                         <!--<td><button type="button" class="btn btn-success" @click="showHisWinDialog(item.rid, 3)">查看</button></td>-->
                     </tr>

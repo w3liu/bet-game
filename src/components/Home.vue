@@ -89,7 +89,7 @@
                   <tbody>
                     <tr v-for="item in awardRecordList" :key="item.rid">
                         <td>{{item.rid}}</td>
-                        <td><div class="bet-ticket" style="background:#888">{{renderTicket(item.ticket)}}</div></td>
+                        <td><div class="bet-ticket" style="background:#888">{{renderTicket(item.first)}}</div></td>
                         <td><button type="button" class="btn btn-success" @click="showHisWinDialog(item.rid, 2)">Show</button></td>
                         <!--<td><button type="button" class="btn btn-success" @click="showHisWinDialog(item.rid, 3)">Show</button></td>-->
                     </tr>
@@ -389,7 +389,7 @@ export default {
         })
     },
     getAwardRecordList: function (i) {
-      if (i >= 5) { return }
+      if (i >= 5 || this.awardRecordList.length > i + 1) { return }
       var rid = this.rid - i - 1
       if (rid >= 1) {
         this.$store.state.contractInstance().getLastAwardInfo.call(rid,
