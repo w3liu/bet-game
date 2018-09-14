@@ -254,7 +254,7 @@ export default {
     renderTicket (ticket) {
       let tkt = ticket + ''
       let len = tkt.length
-      let pad = 4 - len
+      let pad = 3 - len
       let pre = ''
       for (let i = 0; i < pad; i++) {
         pre = pre + '0'
