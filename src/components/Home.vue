@@ -10,7 +10,7 @@
         <div class="col-xs-4">
           <a href="/#/cn" style="color:#fff; padding-top:20px; font-size:12px; font-weight:600; line-height:40px;">中文</a>
         </div>
-        <div class="col-xs-4"><a href="javascript:;" class="link" title="telegram"><i class="fa fa-telegram" aria-hidden="true"></i></a></div>
+        <div class="col-xs-4"><!--<a href="javascript:;" class="link" title="telegram"><i class="fa fa-telegram" aria-hidden="true"></i></a>--><a href="javascript:;" style="color:#fff; padding-top:20px; font-size:14px; font-weight:600; line-height:40px;">QQ Group:368895848</a></div>
       </div>
     </div>
   </div>
@@ -83,14 +83,19 @@
                         <th>ROUND</th>
                         <th>FIRST</th>
                         <th>SECOND</th>
+                        <th>My Tickets</th>
                         <!--<th>THIRD</th>-->
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="item in awardRecordList" :key="item.rid">
                         <td>{{item.rid}}</td>
-                        <td><div class="bet-ticket" style="background:#888">{{renderTicket(item.first)}}</div></td>
+                        <td>
+                          <div class="bet-ticket" v-if="checkAward(item.rid, item.first)" style="background:#f00">{{renderTicket(item.first)}}</div>
+                          <div class="bet-ticket" v-else style="background:#888">{{renderTicket(item.first)}}</div>
+                        </td>
                         <td><button type="button" class="btn btn-success" @click="showHisWinDialog(item.rid, 2)">Show</button></td>
+                        <td><button type="button" class="btn btn-success" @click="showMyTicketDialog(item.rid)">查看</button></td>
                         <!--<td><button type="button" class="btn btn-success" @click="showHisWinDialog(item.rid, 3)">Show</button></td>-->
                     </tr>
                   </tbody>
@@ -115,10 +120,11 @@
             <div class="form-group">
               <label class="control-label"><span style="color:#eee">Balance</span><br/>{{ethBalance}}&nbsp;ETH</label>
             </div>
-            <div class="form-group">
-              <input type="text" class="form-control" v-model="sRoomId" placeholder="RoomId" style="width:70%; float:left;">
-              <button type="button" class="btn btn-default" @click="Seartch()" style="float:right;">Seartch</button><br/>
-              <label class="control-label" style="float:left;">Room Balance: {{roomBalance}}</label>
+            <div class="form-group" style="color:#fff">
+                <div style="float:left;">RoundId：<input type="text" class="form-control" v-model="sRoundId" style="width:70%"/></div>
+                <div style="float:left;">RoomId：<input type="text" class="form-control" v-model="sRoomId"  style="width:70%"></div>
+                <button type="button" class="btn btn-default" @click="seartch" style="float:left; margin-top:10px;">Seartch</button><br/>
+                <label class="control-label" style="float:left; margin-left:10px; margin-top:10px;">RoomBalance: {{roomBalance}}</label>
             </div>
           </form>
         </div>
@@ -168,11 +174,27 @@
             <div class="modal-body">
               <span v-for="ticket in awardTickets" :key="ticket" >
                 <div class="bet-ticket" v-if="checkAward(awardRid, ticket)">{{renderTicket(ticket)}}</div>
-                <div class="bet-ticket" else-if style="background:#888">{{renderTicket(ticket)}}</div>
+                <div class="bet-ticket" else style="background:#888">{{renderTicket(ticket)}}</div>
               </span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" @click="showHisWin(false)">Close</button>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div class="modal" style="display:block" v-if="showMyTicketsDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="showMyTickets(false)">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">My Tickets</h4>
+            </div>
+            <div class="modal-body" style="max-height:500px; overflow:auto">
+              <div class="bet-ticket" v-for="ticket in myTickets" :key="ticket" style="background:#888">{{renderTicket(ticket)}}</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" @click="showMyTickets(false)">Close</button>
             </div>
         </div>
     </div>
@@ -191,11 +213,13 @@ export default {
       leftTime: '00:00:00',
       ticketNumDefaultCss: 'btn btn-success btn-circle',
       tickets: [],
+      myTickets: [],
       checkNum: 50,
       showTicketsDialog: false,
       rid: 1,
       roomId: 1,
       betTotal: 0,
+      sRoundId: 1,
       sRoomId: 1,
       roomBalance: 0,
       cashRoundId: 1,
@@ -204,7 +228,9 @@ export default {
       awardTickets: [],
       awardRid: 1,
       uticketList: [],
-      showHisDialog: false
+      showHisDialog: false,
+      showMyTicketsDialog: false,
+      loaded: false
     }
   },
   computed: {...mapState({
@@ -222,6 +248,9 @@ export default {
   methods: {
     showTickets: function (flag) {
       this.showTicketsDialog = flag
+    },
+    showMyTickets: function (flag) {
+      this.showMyTicketsDialog = flag
     },
     leftTimer: function () {
       var today = new Date()
@@ -309,8 +338,12 @@ export default {
           } else {
             console.log(result)
             this.tickets = result.map(item => parseInt(item))
+            this.tickets = this.tickets.sort(this.randomsort)
           }
         })
+    },
+    randomsort: function (a, b) {
+      return Math.random() > 0.5 ? -1 : 1
     },
     withDraw: function () {
       var rid = 1
@@ -350,14 +383,17 @@ export default {
             if (this.rid > 1) {
               this.cashRoundId = this.rid - 1
               this.getLastAwardInfo(this.rid - 1)
-              this.getAwardRecordList(0)
-              this.geUticketListList(0)
+              if (!this.loaded) {
+                this.getAwardRecordList(0)
+                this.geUticketListList(0)
+                this.loaded = true
+              }
             }
           }
         })
     },
     seartch: function () {
-      let rid = parseInt(this.rid, 10)
+      let rid = parseInt(this.sRoundId, 10)
       let roomId = parseInt(this.sRoomId, 10)
       if (!roomId || roomId > 100 || roomId < 1) {
         alert('error! roomId <= 100 and roomId >= 1')
@@ -389,7 +425,7 @@ export default {
         })
     },
     getAwardRecordList: function (i) {
-      if (i >= 5 || this.awardRecordList.length > i + 1) { return }
+      if (i >= 5) { return }
       var rid = this.rid - i - 1
       if (rid >= 1) {
         this.$store.state.contractInstance().getLastAwardInfo.call(rid,
@@ -446,6 +482,12 @@ export default {
       }
       this.awardTickets = record
       this.awardRid = rid
+    },
+    showMyTicketDialog (rid) {
+      this.showMyTicketsDialog = true
+      let record
+      this.uticketList.forEach(item => { if (item.rid === rid) { record = item } })
+      this.myTickets = record.tickets
     },
     checkAward (rid, ticket) {
       var flag = false
